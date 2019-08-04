@@ -195,13 +195,12 @@ class ELV_ws980wifi_Gateway():
         self._is_valid = None
         self._weather_data = {}
 
-
         try:
             self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self._sock.settimeout(5)
             self._sock.connect(self._server_address)
-        except Exception as e:
-            _LOGGER.error(e)
+        except Exception as ex:
+            _LOGGER.error(ex)
             raise Exception('Socket error')
 
         self.update()
@@ -232,8 +231,8 @@ class ELV_ws980wifi_Gateway():
             _LOGGER.debug('received {!r}'.format(_fmt(data)))
             _LOGGER.debug('checksum {!r}'.format("0x%0.2X" % _calc_checksum(5, 80, data)))
             _LOGGER.debug('checksum {!r}'.format("0x%0.2X" % _calc_checksum(2, 81, data)))
-        except Exception as e:
-            _LOGGER.error(e):
+        except Exception as ex:
+            _LOGGER.error(ex)
             data = None
             self._is_valid = False
             self._weather_data = None
@@ -248,29 +247,6 @@ class ELV_ws980wifi_Gateway():
         _LOGGER.debug('weather data {!r}'.format(self._weather_data))
 
         self._is_valid = self._weather_data is not None
-
-    def handshake(self):
-
-            try:
-                data, server = self.UDP_send_receive('i')
-            except:
-                _LOGGER.error("Handshake failed")
-                raise Exception('Handshake error')
-
-            if data is None:
-                _LOGGER.error("Handshake failed")
-                raise Exception('Handshake error')
-
-    def command(self, message):
-
-            try:
-                self.handshake()
-                data, server = self.UDP_send_receive(message)
-            except:
-                raise Exception('UDP error')
-
-            if data.decode() != 'TCH-OK :done\n':
-                _LOGGER.error("Command failed: {!r}".format(message))
 
     def getweatherdata(self, name):
         try:
