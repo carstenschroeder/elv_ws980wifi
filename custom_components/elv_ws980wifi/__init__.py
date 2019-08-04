@@ -200,8 +200,8 @@ class ELV_ws980wifi_Gateway():
             self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self._sock.settimeout(5)
             self._sock.connect(self._server_address)
-        except:
-            _LOGGER.error("Socket error")
+        except Exception as e:
+            _LOGGER.error(e)
             raise Exception('Socket error')
 
         self.update()
@@ -232,7 +232,8 @@ class ELV_ws980wifi_Gateway():
             _LOGGER.debug('received {!r}'.format(_fmt(data)))
             _LOGGER.debug('checksum {!r}'.format("0x%0.2X" % _calc_checksum(5, 80, data)))
             _LOGGER.debug('checksum {!r}'.format("0x%0.2X" % _calc_checksum(2, 81, data)))
-        except:
+        except Exception as e:
+            _LOGGER.error(e):
             data = None
             self._is_valid = False
             self._weather_data = None
