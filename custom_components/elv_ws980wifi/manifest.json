@@ -1,0 +1,8 @@
+{
+  "domain": "elv_ws980wifi",
+  "name": "ELV WS980Wifi custom integration",
+  "documentation": "",
+  "dependencies": [],
+  "codeowners": ["@carstenschroeder"],
+  "requirements": []
+}
