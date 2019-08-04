@@ -1,2 +1,2 @@
-# keba_kecontact
-Support for Keba KeContact P30 charging station
+# elv_ws980wifi
+Support for ELV WS980Wifi weather station
