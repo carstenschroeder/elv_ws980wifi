@@ -186,22 +186,12 @@ class ELV_ws980wifi_Gateway():
 
     def __init__(self, host, port, name):
 
-        import socket
-
         self._name = name
         self._host = host
         self._port = port
         self._server_address = (self._host, self._port)
         self._is_valid = None
         self._weather_data = {}
-
-        try:
-            self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self._sock.settimeout(5)
-            self._sock.connect(self._server_address)
-        except Exception as ex:
-            _LOGGER.error(ex)
-            raise Exception('Socket error')
 
         self.update()
 
@@ -219,10 +209,28 @@ class ELV_ws980wifi_Gateway():
 
     def update(self):
         import time
+        import socket
 
         message_get_actuals = b'\xFF\xFF\x0B\x00\x06\x04\x04\x19'
 
         _LOGGER.debug('sending {!r}'.format(_fmt(message_get_actuals)))
+
+        try:
+            self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self._sock.settimeout(5)
+        except Exception as ex:
+            _LOGGER.error(ex)
+            raise Exception('Socket error')
+
+        try:
+            self._sock.connect(self._server_address)
+        except Exception as ex:
+            _LOGGER.error(ex)
+            data = None
+            self._is_valid = False
+            self._weather_data = None
+            raise Exception('Connection error')
+        
         try:
             self._sock.send(message_get_actuals)
             time.sleep(0.1)
@@ -237,6 +245,8 @@ class ELV_ws980wifi_Gateway():
             self._is_valid = False
             self._weather_data = None
             raise Exception('Network error')
+        finally:
+            self._sock.close()
 
         if _calc_checksum(5, 80, data) != data[80] or _calc_checksum(2, 81, data) != data[81]:
             _LOGGER.error("Checksum mismatch")
