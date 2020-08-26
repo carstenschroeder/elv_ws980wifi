@@ -14,6 +14,8 @@ _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = timedelta(seconds=10)
 
+CONF_FACTOR = "factor"
+
 DOMAIN = 'elv_ws980wifi'
 
 # Validation of the user's configuration
