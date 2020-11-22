@@ -128,6 +128,12 @@ def _fmt(buf):
     return ''
 
 
+def twos_complement(x,nbytes):
+    bits = nbytes * 8
+    if x & (1 << (bits-1)):
+      x -= 1 << bits
+    return x
+
 def _decode_bytes(buf, idx, nbytes, func):
     # if all bytes are 0xff, the value is not valid...
     for j in range(nbytes):
@@ -139,6 +145,9 @@ def _decode_bytes(buf, idx, nbytes, func):
     x = 0
     for j in range(nbytes):
         x += buf[idx + j] << ((nbytes - j - 1) * 8)
+    # convert to signed int    
+    x = twos_complement(x,nbytes)  
+    # apply lambda function
     return func(x)
 
 
