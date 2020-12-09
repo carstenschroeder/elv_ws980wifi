@@ -135,12 +135,13 @@ def twos_complement(x,nbytes):
     return x
 
 def _decode_bytes(buf, idx, nbytes, func):
-    # if all bytes are 0xff, the value is not valid...
-    for j in range(nbytes):
-        if buf[idx + j] != 0xff:
-            break
-    else:
-        return None
+    # This does not fit to twos complement FFFF = -0.1
+    ## if all bytes are 0xff, the value is not valid...
+    #for j in range(nbytes):
+    #    if buf[idx + j] != 0xff:
+    #        break
+    #else:
+    #    return None
     # ...otherwise, calculate a value from the bytes, MSB first
     x = 0
     for j in range(nbytes):
