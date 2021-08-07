@@ -1,6 +1,6 @@
 {
   "domain": "elv_ws980wifi",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "name": "ELV WS980Wifi custom integration",
   "documentation": "",
   "dependencies": [],
