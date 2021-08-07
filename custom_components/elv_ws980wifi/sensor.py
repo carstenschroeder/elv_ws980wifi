@@ -62,7 +62,7 @@ class ELV_ws980wifi_Sensor(SensorEntity):
             if self._gateway.is_valid:
                 self._attr_state = self._gateway.getweatherdata(self._fieldname)
                 if self._factor is not None:
-                    self._attr_state = round(self._state * self._factor, 2)
+                    self._attr_state = round(self._attr_state * self._factor, 2)
             else:
                 self._attr_state = None
         except Exception as ex:
