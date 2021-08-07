@@ -5,7 +5,7 @@ import voluptuous as vol
 from . import DOMAIN, CONF_FACTOR
 
 # Import the device class from the component that you want to support
-from homeassistant.components.sensor import PLATFORM_SCHEMA
+from homeassistant.components.sensor import STATE_CLASS_MEASUREMENT, PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_NAME, CONF_UNIT_OF_MEASUREMENT
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
@@ -41,39 +41,25 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
             _LOGGER.error("No valid data received from weather station")
 
 
-class ELV_ws980wifi_Sensor(Entity):
+class ELV_ws980wifi_Sensor(SensorEntity):
 
     def __init__(self, name, unit_of_measurement, factor, gateway):
         self._fieldname = name
-        self._name = gateway.name + '_' + name
-        self._unique_id = gateway.name + '_' + name
-        self._unit_of_measurement = unit_of_measurement
         self._factor = factor
         self._gateway = gateway
         self._state = None
 
+        self._attr_name = gateway.name + '_' + name
+        self._attr_unique_id = gateway.name + '_' + name
+        self._attr_unit_of_measurement = unit_of_measurement
+        self._attr_state_class = STATE_CLASS_MEASUREMENT
+
         self.update()
-
-    @property
-    def name(self):
-        """Return the display name of this sensor."""
-        return self._name
-
-    @property
-    def unique_id(self):
-        """Return an unique identifier for this entity."""
-        return self._unique_id
 
     @property
     def state(self):
         """Return the state of the sensor."""
         return self._state
-
-    @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement."""
-        return self._unit_of_measurement
-
 
     def update(self):
         """Update state of sensor."""
