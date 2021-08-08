@@ -5,7 +5,7 @@ import voluptuous as vol
 from . import DOMAIN, CONF_FACTOR
 
 # Import the device class from the component that you want to support
-from homeassistant.components.sensor import STATE_CLASS_MEASUREMENT, PLATFORM_SCHEMA, SensorEntity
+from homeassistant.components.sensor import DEVICE_CLASS_HUMIDITY, DEVICE_CLASS_ILLUMINANCE, DEVICE_CLASS_PRESSURE, DEVICE_CLASS_TEMPERATURE, STATE_CLASS_MEASUREMENT, PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_NAME, CONF_UNIT_OF_MEASUREMENT
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
@@ -52,7 +52,19 @@ class ELV_ws980wifi_Sensor(SensorEntity):
         self._attr_name = gateway.name + '_' + name
         self._attr_unique_id = gateway.name + '_' + name
         self._attr_unit_of_measurement = unit_of_measurement
-        self._attr_state_class = STATE_CLASS_MEASUREMENT
+
+        if unit_of_measurement == "°C":
+            self._attr_device_class = DEVICE_CLASS_TEMPERATURE
+            self._attr_state_class = STATE_CLASS_MEASUREMENT
+        elif unit_of_measurement == "mbar":
+            self._attr_device_class = DEVICE_CLASS_PRESSURE
+            self._attr_state_class = STATE_CLASS_MEASUREMENT
+        elif unit_of_measurement == "%":
+            self._attr_device_class = DEVICE_CLASS_HUMIDITY
+            self._attr_state_class = STATE_CLASS_MEASUREMENT
+        elif unit_of_measurement == "lux":
+            self._attr_device_class = DEVICE_CLASS_ILLUMINANCE
+            self._attr_state_class = STATE_CLASS_MEASUREMENT
 
         self.update()
 
