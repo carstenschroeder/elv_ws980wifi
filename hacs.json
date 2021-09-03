@@ -2,5 +2,5 @@
   "name": "ELV WS980wifi Integration",
   "render_readme": true,
   "domains": ["switch"],
-  "iot_class": ["Local Polling"]
+  "homeassistant": "2021.9.0"
 }
