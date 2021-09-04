@@ -48,10 +48,10 @@ class ELV_ws980wifi_Sensor(SensorEntity):
         self._factor = factor
         self._gateway = gateway
         
-        self._attr_state = None
+        self._attr_native_value = None
         self._attr_name = gateway.name + '_' + name
         self._attr_unique_id = gateway.name + '_' + name
-        self._attr_unit_of_measurement = unit_of_measurement
+        self._attr_native_unit_of_measurement = unit_of_measurement
 
         if unit_of_measurement == "°C":
             self._attr_device_class = DEVICE_CLASS_TEMPERATURE
@@ -69,13 +69,13 @@ class ELV_ws980wifi_Sensor(SensorEntity):
         self.update()
 
     def update(self):
-        """Update state of sensor."""
+        """Update value of sensor."""
         try:
             if self._gateway.is_valid:
-                self._attr_state = self._gateway.getweatherdata(self._fieldname)
+                self._attr_native_value = self._gateway.getweatherdata(self._fieldname)
                 if self._factor is not None:
-                    self._attr_state = round(self._attr_state * self._factor, 2)
+                    self._attr_native_value = round(self._attr_native_value * self._factor, 2)
             else:
-                self._attr_state = None
+                self._attr_native_value = None
         except Exception as ex:
             _LOGGER.error(ex)
