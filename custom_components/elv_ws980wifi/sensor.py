@@ -5,8 +5,21 @@ import voluptuous as vol
 from . import DOMAIN, CONF_FACTOR
 
 # Import the device class from the component that you want to support
-from homeassistant.components.sensor import DEVICE_CLASS_HUMIDITY, DEVICE_CLASS_ILLUMINANCE, DEVICE_CLASS_PRESSURE, DEVICE_CLASS_TEMPERATURE, STATE_CLASS_MEASUREMENT, PLATFORM_SCHEMA, SensorEntity
-from homeassistant.const import CONF_NAME, CONF_UNIT_OF_MEASUREMENT
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorStateClass,
+    PLATFORM_SCHEMA,
+    SensorEntity
+)
+from homeassistant.const import (
+    UnitOfIrradiance,
+    UnitOfPressure,
+    UnitOfTemperature,
+    PERCENTAGE,
+    LIGHT_LUX,
+    CONF_NAME,
+    CONF_UNIT_OF_MEASUREMENT
+)
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import Entity
 
@@ -54,17 +67,25 @@ class ELV_ws980wifi_Sensor(SensorEntity):
         self._attr_native_unit_of_measurement = unit_of_measurement
 
         if unit_of_measurement == "°C":
-            self._attr_device_class = DEVICE_CLASS_TEMPERATURE
-            self._attr_state_class = STATE_CLASS_MEASUREMENT
+            self._attr_device_class = SensorDeviceClass.TEMPERATURE
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
         elif unit_of_measurement == "mbar":
-            self._attr_device_class = DEVICE_CLASS_PRESSURE
-            self._attr_state_class = STATE_CLASS_MEASUREMENT
+            self._attr_device_class = SensorDeviceClass.PRESSURE
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_native_unit_of_measurement = UnitOfPressure.MBAR
         elif unit_of_measurement == "%":
-            self._attr_device_class = DEVICE_CLASS_HUMIDITY
-            self._attr_state_class = STATE_CLASS_MEASUREMENT
+            self._attr_device_class = SensorDeviceClass.HUMIDITY
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_native_unit_of_measurement = PERCENTAGE
         elif unit_of_measurement == "lux":
-            self._attr_device_class = DEVICE_CLASS_ILLUMINANCE
-            self._attr_state_class = STATE_CLASS_MEASUREMENT
+            self._attr_device_class = SensorDeviceClass.ILLUMINANCE
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_native_unit_of_measurement = LIGHT_LUX
+        elif unit_of_measurement == "W/m2":
+            self._attr_device_class = SensorDeviceClass.IRRADIANCE
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_native_unit_of_measurement = UnitOfIrradiance.WATTS_PER_SQUARE_METER
 
         self.update()
 
