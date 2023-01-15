@@ -101,6 +101,7 @@ class ELV_ws980wifi_Sensor(SensorEntity):
             self._attr_device_class = SensorDeviceClass.WIND_SPEED 
             self._attr_state_class = SensorStateClass.MEASUREMENT 
             self._attr_native_unit_of_measurement = UnitOfSpeed.KILOMETERS_PER_HOUR 
+            self._factor = 3.6
 
         self.update()
 
