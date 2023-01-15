@@ -13,8 +13,11 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import (
     UnitOfIrradiance,
+    UnitOfPrecipitationDepth,
     UnitOfPressure,
+    UnitOfSpeed,
     UnitOfTemperature,
+    UnitOfVolumetricFlux,
     PERCENTAGE,
     LIGHT_LUX,
     CONF_NAME,
@@ -86,6 +89,18 @@ class ELV_ws980wifi_Sensor(SensorEntity):
             self._attr_device_class = SensorDeviceClass.IRRADIANCE
             self._attr_state_class = SensorStateClass.MEASUREMENT
             self._attr_native_unit_of_measurement = UnitOfIrradiance.WATTS_PER_SQUARE_METER
+        elif self._fieldname == "rain_rate":
+            self._attr_device_class = SensorDeviceClass.PRECIPITATION_INTENSITY 
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_native_unit_of_measurement = UnitOfVolumetricFlux.MILLIMETERS_PER_HOUR
+        elif self._fieldname in ("rain_day", "rain_week", "rain_month", "rain_year", "rain_totals"):
+            self._attr_device_class = SensorDeviceClass.PRECIPITATION
+            self._attr_state_class = SensorStateClass.TOTAL_INCREASING 
+            self._attr_native_unit_of_measurement = UnitOfPrecipitationDepth.MILLIMETERS
+        elif self._fieldname in ("wind_speed", "gust_speed"):
+            self._attr_device_class = SensorDeviceClass.WIND_SPEED 
+            self._attr_state_class = SensorStateClass.MEASUREMENT 
+            self._attr_native_unit_of_measurement = UnitOfSpeed.KILOMETERS_PER_HOUR 
 
         self.update()
 
